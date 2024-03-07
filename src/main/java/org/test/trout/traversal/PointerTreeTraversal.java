@@ -24,6 +24,7 @@ public class PointerTreeTraversal {
 	
 	public void traverseTree(Node node, IndirectionTable indirectionTable, RenderingEngine renderingEngine, MetricsCollector metricsCollector) {
 		
+		assert node != null;
 		// Though it is tree, this shouldn't be cyclic, 
 		BitSet visitedSet = new BitSet(256);
 		
@@ -51,6 +52,7 @@ public class PointerTreeTraversal {
 			}
 			renderingEngine.render(node); // Let rendering engine render the node, as of now passing it for all node types
 			node = node.getNextNode();
+			assert node != null;
 		} while(node.geType()!=0); // break when we reached head of the current level.
 		
 	}

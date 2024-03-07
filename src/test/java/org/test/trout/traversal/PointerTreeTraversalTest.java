@@ -25,8 +25,35 @@ public class PointerTreeTraversalTest {
 	public void init() {
 		renderingEngine = new ProxyRenderingEngine();
 		metricsCollector = new NullMetricCollector();
+		indirectionTable = new IndirectionTable();
 	}
 	
+	@Test( expected = Error.class) 
+	public void testFailFastScenariosNullHead() {
+		PointerTreeTraversal pointerTreeTraversal = new PointerTreeTraversal();
+		pointerTreeTraversal.traverseTree(null, indirectionTable, renderingEngine, metricsCollector);
+	}
+	
+	@Test( expected = Error.class) 
+	public void testFailFastScenariosNextNodeNull() {
+		byte data[] = {(byte)0, (byte)1,(byte)1,(byte)1};
+		Node head = new Node(data);
+		head.setNode(null);
+		PointerTreeTraversal pointerTreeTraversal = new PointerTreeTraversal();
+		pointerTreeTraversal.traverseTree(head, indirectionTable, renderingEngine, metricsCollector);
+	}
+	
+	@Test( expected = Error.class) 
+	public void testFailFastScenariosIndirectionDontContainReference() {
+		byte data0[] = {(byte)0, (byte)1,(byte)0,(byte)1};
+		byte data1[] = {(byte)0, (byte)1,(byte)1,(byte)1};
+		Node a0 = new Node(data0);
+		Node a1 = new Node(data1);
+		a0.setNode(a1);
+		a1.setNode(a0);
+		PointerTreeTraversal pointerTreeTraversal = new PointerTreeTraversal();
+		pointerTreeTraversal.traverseTree(head, indirectionTable, renderingEngine, metricsCollector);
+	}
 	
 	@Test
 	public void testExampleTraversal() throws Exception {
