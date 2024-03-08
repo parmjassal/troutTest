@@ -48,6 +48,28 @@ provide accessors for each element like gen, type, ref, and link. Possibly `link
 - when we reach the head of the current list, do switch using the head nodes reference and use the indirection node.
 - Stop the algorithm when currentNode and `toStoreNextBranch` are the same
 
+```
+    Node currentNode = node;
+		Node toStoreNextBranch = node;
+		while (true) {
+			renderingEngine.render(currentNode);
+			if (currentNode.geType() == 1) {
+				toStoreNextBranch.setRef(currentNode.getRef());
+				toStoreNextBranch = indirectionTable.getIndirection(currentNode.getRef());
+			}
+			
+			currentNode = currentNode.getNextNode();
+			
+			if (currentNode.geType() == 0) {
+				if (currentNode == toStoreNextBranch) {
+					break;
+				} else {
+					currentNode = indirectionTable.getIndirection(currentNode.getRef());
+				}
+			}
+		}
+```
+
 Time Complexity :- O(num nodes)
 Space Complexity :- O(constant)
  
