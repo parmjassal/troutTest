@@ -23,39 +23,25 @@ import org.test.trout.model.Node;
 public class PointerTreeTraversal {
 	
 	public void traverseTree(Node node, IndirectionTable indirectionTable, RenderingEngine renderingEngine, MetricsCollector metricsCollector) {
-		
 		assert node != null;
-		// Though it is tree, this shouldn't be cyclic, 
-		BitSet visitedSet = new BitSet(256);
 		
-		// The head ref can be use as stack for dfs but the problem is it is 8 bits only.
-		// Not mentioned in the problem if the IndirectionTable entries and number of nodes in the tree are 1:1?
-		// Therefore using stack for traversal, not recursion. 
-		Stack<Node> stack = new Stack<Node>(); // In CPP/C, we can pass memory allocator or it can be initialized on stack itself.
-		stack.add(node);
-		while(!stack.isEmpty()) {
-			traverseTreeLevel(stack, visitedSet, indirectionTable, renderingEngine, metricsCollector);
+		traverseLevel(node, renderingEngine, metricsCollector);
+		for (int i=0;i<256;i++) {
+			Node refNodes = indirectionTable.getIndirection(i);
+			if (refNodes != null) {
+				traverseLevel(refNodes, renderingEngine, metricsCollector);
+			} 
 		}
+		
 	}
 	
-	
-	private void traverseTreeLevel(Stack<Node> stack, BitSet visitedSet, IndirectionTable indirectionTable, RenderingEngine renderingEngine, MetricsCollector metricsCollector) {
-		Node node = stack.pop();
-		
+	public void traverseLevel(Node node, RenderingEngine renderingEngine, MetricsCollector metricsCollector) {
+		Node current = node;
 		do {
-			if (node.geType() == 1 && !visitedSet.get(node.getRef())) { // We got to the node which has ref for another level.
-				Node refNode = indirectionTable.getIndirection(node.getRef());
-				visitedSet.flip(node.getRef());
-				stack.add(node); // add current node to stack for traversal later.
-				stack.add(refNode); // add next level node to the stack for traversal.
-				return; // break to move to next level
-			}
-			renderingEngine.render(node); // Let rendering engine render the node, as of now passing it for all node types
-			node = node.getNextNode();
-			assert node != null;
-		} while(node.geType()!=0); // break when we reached head of the current level.
-		
+			renderingEngine.render(current);
+			current = current.getNextNode();
+		} while(current!=null && current.geType()!=0);
 	}
-
 	
+
 }
