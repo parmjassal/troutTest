@@ -41,6 +41,9 @@ provide accessors for each element like gen, type, ref, and link. Possibly `link
 - The indirection table provides the reference to the head of the node at all levels except the top level.
 - Both tree and indirection table are stable and represents the same truth.
 
+Space Complexity:- O(1)
+Time Complexity :- O(all nodes in the tree + constant 255 lookup into the indirection table)
+
 ### Algorithm
 
 - Iterate the top level using the node.
