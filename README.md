@@ -29,25 +29,23 @@ We can have
 
 *data = malloc(12 * num_nodes);
 
-provide accessors for each element like gen, type, ref and link. Possibly `link` can be replaced with `index` only.
+provide accessors for each element like gen, type, ref, and link. Possibly `link` can be replaced with `index` only.
 
 
 ```
 
-- `org.test.trout.traversal` contains the actual implmentation of the algorithm. As of now it has only implmentation. We should have interfaces as well.
+- `org.test.trout.traversal` contains the actual implementation of the algorithm. As of now, it has only implementation. We should have interfaces as well.
 
 
 ### Assumptions
-- Indirection table can contain at max 256 elements for mapping reference to Nodes because in node structure we are using 8 bits for reference.
+- The indirection table provides the reference to the head of the node at all levels except the top level.
+- Both tree and indirection table are stable and represents the same truth.
 
+### Algorithm
 
-### Alogrithm
-
-Iterative DFS (not recursive) is used for traversal. Need to use stack for the iterative implementation, could have used `head` node of current level to point to previous level node. But the problem is the ref is only 8 bit and can only work if we are sure number of nodes in the tree are same as in indirection table.
-
-Space Complexity :- O(depth of the tree)
-Time Complexity :- O(num of nodes in the tree)
-
+- Iterate the top level using the node.
+- Iterate remaining levels using indirection by iterating [0..255] and looking up the head nodes, then just iterate the linked list.
+[NOTE:- Not validated the whether the node] 
  
 ### Testing
 Added a function test for the example given in the document and some basic unit test scenarios to fail fast. 
