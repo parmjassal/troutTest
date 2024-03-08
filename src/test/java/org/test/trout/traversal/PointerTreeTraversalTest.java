@@ -34,26 +34,37 @@ public class PointerTreeTraversalTest {
 		pointerTreeTraversal.traverseTree(null, indirectionTable, renderingEngine, metricsCollector);
 	}
 	
+	@Test( expected = Error.class) 
+	public void testFailFastScenariosNextNodeNull() {
+		byte data[] = {(byte)0, (byte)1,(byte)1,(byte)1};
+		Node head = new Node(data);
+		head.setNode(null);
+		PointerTreeTraversal pointerTreeTraversal = new PointerTreeTraversal();
+		pointerTreeTraversal.traverseTree(head, indirectionTable, renderingEngine, metricsCollector);
+	}
+	
 	@Test
 	public void testExampleTraversal() throws Exception {
 		buildExampleFromTest();
 		PointerTreeTraversal pointerTreeTraversal = new PointerTreeTraversal();
 		pointerTreeTraversal.traverseTree(head, indirectionTable, renderingEngine, metricsCollector);
-		assertEquals(8, renderingEngine.accessCount);
+		assertEquals(9, renderingEngine.accessCount);
 	}
 	
 	
 	private void buildExampleFromTest() {
-		byte [][] ndata = new byte[8][4];
+		byte [][] ndata = new byte[9][4];
 		updateData(ndata,  0, (short)1, (byte) 0, (byte)2); // level a
-		updateData(ndata,  1, (short)2, (byte) 5, (byte)17); // level a 
+		updateData(ndata,  1, (short)2, (byte) 1, (byte)17); // level a 
 		updateData(ndata,  2, (short)1, (byte) 1, (byte)0); // level a
 		updateData(ndata,  3, (short)1, (byte) 0, (byte)2); // level b
-		updateData(ndata,  4, (short)2, (byte) 1, (byte)1); // level b
+		updateData(ndata,  4, (short)2, (byte) 1, (byte)129); // level b
 		updateData(ndata,  5, (short)2, (byte) 5, (byte)2); // level b
 		updateData(ndata,  6, (short)1, (byte) 4, (byte)2); // level b
 		updateData(ndata,  7, (short)0, (byte) 0, (byte)0); // level c
+		updateData(ndata,  8, (short)0, (byte) 0, (byte)0); // level d
 		
+		Node d0 = new Node(ndata[8]);
 		Node c0 = new Node(ndata[7]);
 		
 		Node b0 = new Node(ndata[3]);
@@ -75,8 +86,9 @@ public class PointerTreeTraversalTest {
 		head = a0;
 		
 		indirectionTable = new IndirectionTable();
-		indirectionTable.setIndirection(0,b0);
-		indirectionTable.setIndirection(1, c0);
+		indirectionTable.setIndirection((byte) 0,b0);
+		indirectionTable.setIndirection((byte) 129, c0);
+		indirectionTable.setIndirection((byte) 17, d0);
 		
 	}
 

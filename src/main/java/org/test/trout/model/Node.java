@@ -38,4 +38,10 @@ public class Node {
 	public Node getNextNode() {
 		return node;
 	}
+	
+	public void setRef(byte ref) {
+		data[3] = ref;
+	}
+	
+	
 }
