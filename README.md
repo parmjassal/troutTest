@@ -39,16 +39,17 @@ provide accessors for each element like gen, type, ref, and link. Possibly `link
 
 ### Assumptions
 - The indirection table provides the reference to the head of the node at all levels except the top level.
-- Both tree and indirection table are stable and represents the same truth.
-
-Space Complexity:- O(1)
-Time Complexity :- O(all nodes in the tree + constant 255 lookup into the indirection table)
+- Both the tree and indirection table are stable and represent the same truth.
 
 ### Algorithm
 
-- Iterate the top level using the node.
-- Iterate remaining levels using indirection by iterating [0..255] and looking up the head nodes, then just iterate the linked list.
-[NOTE:- Not validated the whether the node] 
+- Start traversal for the top-level
+- Keep reference `toStoreNextBranch` of the head node where we will store the `ref` when encountering the type one node.
+- when we reach the head of the current list, do switch using the head nodes reference and use the indirection node.
+- Stop the algorithm when currentNode and `toStoreNextBranch` are the same
+
+Time Complexity :- O(num nodes)
+Space Complexity :- O(constant)
  
 ### Testing
 Added a function test for the example given in the document and some basic unit test scenarios to fail fast. 
